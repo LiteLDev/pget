@@ -247,7 +247,7 @@ func bindFiles(c *DownloadConfig, partialDir string) error {
 
 		defer subfp.Close()
 
-		if _, err := io.Copy(f, proxy); err != nil {
+		if _, err := io.Copy(f, subfp); err != nil {
 			return errors.Wrapf(err, "failed to copy %q", name)
 		}
 
