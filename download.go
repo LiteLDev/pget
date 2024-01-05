@@ -239,8 +239,6 @@ func bindFiles(c *DownloadConfig, partialDir string) error {
 	}
 	defer f.Close()
 
-	bar := pb.Start64(c.ContentLength).SetWriter(stdout)
-
 	copyFn := func(name string) error {
 		subfp, err := os.Open(name)
 		if err != nil {
@@ -249,7 +247,6 @@ func bindFiles(c *DownloadConfig, partialDir string) error {
 
 		defer subfp.Close()
 
-		proxy := bar.NewProxyReader(subfp)
 		if _, err := io.Copy(f, proxy); err != nil {
 			return errors.Wrapf(err, "failed to copy %q", name)
 		}
@@ -268,8 +265,6 @@ func bindFiles(c *DownloadConfig, partialDir string) error {
 			return errors.Wrapf(err, "failed to remove %q in download location", partialFilename)
 		}
 	}
-
-	bar.Finish()
 
 	// remove download location
 	// RemoveAll reason: will create .DS_Store in download location if execute on mac
